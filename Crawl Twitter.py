@@ -1,23 +1,11 @@
 import tweepy
 import pandas as pd
 
-#Bu Selly
-consumer_key = 'wU2srXqhIlZEHPUNRn71Ligs9'
-consumer_secret = 'BAdzrCvTmunLHENsjWX91DK6G31Hsx622hL3LDWmbZnFIK9gtM'
-access_token = '110120311-sD6JPWSdPv45TlIHvD0zQIgRMYMcCZSX8vXCnwno'
-access_token_secret = '9YTWxh5rS9PqX0eh3BbyAOolFVRTEBMOBB22OgGIWFjrO'
-
-#Rizky
-consumer_key = '2xPzS0XSEIdpyiI65o9uABjro'
-consumer_secret = 'ChMPw04zMTX12sv1amYcced8sF6rmlAFqzM5nMkGOWlXbcMG3z'
-access_token = '51395041-xBkiyOCZrY2xHXnR08EszW4aVUM4SU85KqrB6beEC'
-access_token_secret = 'DxzSengsN9V8j8bLuUHsP73Z8bj39aEL9MqSP3FD39KJS'
-
-#Wahyu
-consumer_key = '2NBRV4vmmVeimyznPpFPMNVTc'
-consumer_secret = 'jVe6ujjn7yqc6mZmHqHxOqSUz4S7o4rEuVHl6p3yqdK2PJcpvE'
-access_token = '1240469132551708672-9d23s1S9oQpJWOpeV9aMJ9VT2Gdpf8'
-access_token_secret = 'uuZQhai6FuCLBsRAFnOOlMMvLCbsz04BFHPBZeJhdtxdS'
+#Key
+consumer_key = '##################################'
+consumer_secret = '################################################'
+access_token = '###################################################'
+access_token_secret = '#############################################'
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)

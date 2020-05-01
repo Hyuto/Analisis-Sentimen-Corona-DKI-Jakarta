@@ -44,7 +44,7 @@ for tweet in tweepy.Cursor(api.search, q=query, tweet_mode='extended', count = 2
 
 #To Json
 data_json = pd.DataFrame(tweetan)
-data_json.to_json('Crawling Twitter 4.json')
+data_json.to_json('Dataset/Crawling Twitter 4.json')
 
 #To_CSV
 data = pd.DataFrame()
@@ -56,4 +56,4 @@ data['Banyak Retweet']=rtc
 data['Source']=source
 data['Retweet Status']=rts
 data['Hashtags'] = hashtag
-data.to_csv('Crawling Twitter Jakarta Baru 27.csv',index=False)
+data.to_csv('Dataset/Crawling Twitter Jakarta Baru 27.csv',index=False)

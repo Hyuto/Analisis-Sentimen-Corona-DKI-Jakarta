@@ -1,5 +1,4 @@
 import re
-import json
 import string
 from nltk.tokenize import word_tokenize
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
@@ -17,8 +16,6 @@ my_stop_words = my_stop_words.split()
 def my_preprocessor(mytext):
     #Convert to lower case
     mytext = mytext.lower()
-    #Remove additional code
-    mytext = mytext.replace('\\xe2\\x80\\xa6', '')
     #Convert www.* or https?://* to URL
     mytext = re.sub('((www\.[^\s]+)|(https?://[^\s]+))','URL',mytext)
     #Convert @username to AT_USER

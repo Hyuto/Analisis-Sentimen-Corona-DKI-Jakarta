@@ -30,7 +30,10 @@ def to_csv(tweetan, tanggal, teks, Id, sn, source, rtc, rts, hashtag):
     data.to_csv(f'output/Crawl Twitter Jakarta {datetime.today().strftime("%Y-%m-%d")}.csv', index=False)
 
 if __name__ == '__main__':
-    n = int(sys.argv[1])
+    try:
+        n = int(sys.argv[1])
+    except:
+        raise KeyError('Harus menspesifikasikan "N" (Banyaknya data yang akan dicrawl)')
 
     # Key
     api = API('API.json').data

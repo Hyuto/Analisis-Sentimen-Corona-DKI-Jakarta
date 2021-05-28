@@ -1,6 +1,7 @@
 import json
 
 class API(object):
-    def __init__(self, text = "API.json"):
+    """ Load & Preprocess API.json """
+    def __init__(self, text):
         with open(text, 'r') as f:
             self.data = json.load(f)

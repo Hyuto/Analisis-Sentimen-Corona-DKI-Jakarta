@@ -1,23 +1,28 @@
 # Analisis Sentimen Twitter Corona DKI Jakarta
-UTS Big Data : Analisis Sentimen Twitter untuk mengetahui Dampak dari Pandemi COVID-19 terhadap masyarakat Jakarta menggunakan TF-IDF Vectorizer &amp; Random Forest Classifier<br />
-Json data : <a href="https://drive.google.com/drive/folders/1Ye6a_u68oq8Hw6NZuZuQ4sQLKogfrXnP?usp=sharing">Here</a><br />
-<br />
+
+UTS Big Data : Analisis Sentimen Twitter untuk mengetahui Dampak dari Pandemi COVID-19 terhadap masyarakat Jakarta menggunakan TF-IDF Vectorizer &amp; Random Forest Classifier
+
+Json data : [Here](https://drive.google.com/drive/folders/1Ye6a_u68oq8Hw6NZuZuQ4sQLKogfrXnP?usp=sharing")
+
 <img src="Wordcloud.png"
      alt="Markdown Monster icon"
      style="display:block;float:none;margin-left:auto;margin-right:auto;width:80%" />
 
-<br>
 
 ## Usage
-<hr>
+
+<hr />
 
 ### 1. Install Requirements
+
 Cd ke direktori & run pada cmd anda.
 
 ```
 pip install --user -r requirements.txt
 ```
+
 ### 2. Twitter API
+
 Masukkan API yang sudah di dapat dari pihak twitter ke API.txt. Jika belum memiliki API anda bisa mengunjungi <a href ="https://developer.twitter.com/en/apps">Twitter Dev App</a> untuk pengajuan API-nya.
 <br>
 Contoh :<br>

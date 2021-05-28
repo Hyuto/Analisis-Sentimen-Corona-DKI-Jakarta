@@ -1,43 +1,57 @@
-import re
-import string
+# Imports
+import re, string
 from nltk.tokenize import word_tokenize
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
 # Create Sastrawi stemmer
-stemmer = StemmerFactory().create_stemmer()
+STEMMER = StemmerFactory().create_stemmer()
 
 # Create Stopword
-f = open("Kamus/Stopword.txt", "r")
-my_stop_words = f.readline()
-f.close()
-my_stop_words = my_stop_words.split()
+with open("kamus/Stopword.txt", "r") as f:
+    STOPWORDS = f.readline().split()
+
+# Kata Positif
+with open('kamus/Kata Positif.txt', 'r') as f:
+    POSITIF = f.readlines()
+
+# Kata Negatif
+with open('kamus/Kata Negatif.txt', 'r') as f:
+    NEGATIF = f.readlines()
+
+# Kata positif dan negatif yang timpang tindih
+for i in range(len(POSITIF)):
+    if i>=len(NEGATIF):
+        POSITIF[i] = POSITIF[i].strip()
+    else :
+        POSITIF[i] = POSITIF[i].strip()
+        NEGATIF[i] = NEGATIF[i].strip()
 
 # Preprocessor
-def my_preprocessor(mytext):
-    #Convert to lower case
-    mytext = mytext.lower()
-    #Convert www.* or https?://* to URL
-    mytext = re.sub('((www\.[^\s]+)|(https?://[^\s]+))','URL',mytext)
-    #Convert @username to AT_USER
-    mytext = re.sub('@[^\s]+','ATUSER',mytext)
-    #Remove additional white spaces
-    mytext = re.sub('[\s]+', ' ', mytext)
-    #Replace #word with word
-    mytext = re.sub(r'#([^\s]+)', r'\1',mytext)
-    #Menghapus angka dari teks
-    mytext = re.sub(r"\d+", "", mytext)
-    #Menghapus tanda baca
-    mytext = mytext.translate(str.maketrans(string.punctuation, ' '*len(string.punctuation)))
-    return mytext
+def preprocessor(text):
+    # Convert to lower case
+    text = text.lower()
+    # Convert www.* or https?://* to URL
+    text = re.sub('((www\.[^\s]+)|(https?://[^\s]+))','URL',text)
+    # Convert @username to AT_USER
+    text = re.sub('@[^\s]+','ATUSER',text)
+    # Remove additional white spaces
+    text = re.sub('[\s]+', ' ', text)
+    # Replace #word with word
+    text = re.sub(r'#([^\s]+)', r'\1',text)
+    # Menghapus angka dari teks
+    text = re.sub(r"\d+", "", text)
+    # Menghapus tanda baca
+    text = text.translate(str.maketrans(string.punctuation, ' ' * len(string.punctuation)))
+    return text
 
 # Tokenizer
-def my_tokenizer(mytext):
-    words = word_tokenize(mytext)
+def tokenizer(text):
+    words = word_tokenize(text)
     tokens=[]
     for w in words:
-        #add tokens
+        # add tokens
         if w not in ['ATUSER','URL'] and len(w) > 3:
-            w = stemmer.stem(w)
+            w = STEMMER.stem(w)
             tokens.append(w.lower())
     return tokens
 
@@ -47,36 +61,21 @@ def cleaning(text):
     text = text.replace('\\n',' ')
     return text
 
-f = open('Kamus/Kata_Positif.txt', 'r')
-positif = f.readlines()
-f.close()
-
-f = open('Kamus/Kata_Negatif.txt', 'r')
-negatif = f.readlines()
-f.close()
-
-for i in range(len(positif)):
-    if i>=len(negatif):
-        positif[i] = positif[i].strip()
-    else :
-        positif[i] = positif[i].strip()
-        negatif[i] = negatif[i].strip()
-
-def analis(string) :
+def analyst(string) :
     string = cleaning(string)
-    string = my_preprocessor(string)
-    string = my_tokenizer(string)
+    string = preprocessor(string)
+    string = tokenizer(string)
     
     for i in range(len(string)-1,-1,-1):
-        if string[i] in my_stop_words:
-            del string[i]
+        if string[i] in STOPWORDS:
+            string.pop(i)
     
     n_p = 0
     n_n = 0
     for kata in string :
-        if kata in positif:
+        if kata in POSITIF:
             n_p += 1
-        elif kata in negatif:
+        elif kata in NEGATIF:
             n_n += 1
     
     if n_p > n_n :

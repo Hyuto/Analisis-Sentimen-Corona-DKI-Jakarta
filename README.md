@@ -1,53 +1,79 @@
 # Analisis Sentimen Twitter Corona DKI Jakarta
-UTS Big Data : Analisis Sentimen Twitter untuk mengetahui Dampak dari Pandemi COVID-19 terhadap masyarakat Jakarta menggunakan TF-IDF Vectorizer &amp; Random Forest Classifier<br />
-Json data : <a href="https://drive.google.com/drive/folders/1Ye6a_u68oq8Hw6NZuZuQ4sQLKogfrXnP?usp=sharing">Here</a><br />
-<br />
+
+UTS Big Data : Analisis Sentimen Twitter untuk mengetahui Dampak dari Pandemi COVID-19 terhadap masyarakat Jakarta menggunakan TF-IDF Vectorizer &amp; SVM
+
+Json data : [Here](https://drive.google.com/drive/folders/1Ye6a_u68oq8Hw6NZuZuQ4sQLKogfrXnP?usp=sharing")
+
 <img src="Wordcloud.png"
-     alt="Markdown Monster icon"
+     alt="wordcloud"
      style="display:block;float:none;margin-left:auto;margin-right:auto;width:80%" />
 
-<br>
 
-## Usage
-<hr>
+## Run on Local
 
-### 1. Install Requirements
-Cd ke direktori & run pada cmd anda.
+<hr />
+
+### 1. Clone repository ini
+
+Clone / download repo ini. Anda dapat menggunakan `git` untuk melakukan hal ini. Buka terminal dan run code berikut
 
 ```
-pip install --user -r requirements.txt
+git clone https://github.com/Hyuto/Analisis-Sentimen-Corona-DKI-Jakarta.git
 ```
+
+Anda juga dapat mendownload repo ini dengan klik tombol code (pojok kanan atas) dan pilih `Download ZIP` untuk mendowload repo ini sebagai ZIP file lalu extract file tersebut.
+
+Selanjutnya anda bisa langsung `cd` ke-main directory.
+
+```
+cd Analisis-Sentimen-Corona-DKI-Jakarta
+```
+
+### 2. Install Requirements
+
+Tahap selanjutnya adalah install library yang dibutuhkan.
+
+| OS | Command |
+| -- | ------- |
+| Linux | `pip install -r requirements.txt` |
+| windows | `py -m pip install --user -r requirements.txt` |
+
 ### 2. Twitter API
-Masukkan API yang sudah di dapat dari pihak twitter ke API.txt. Jika belum memiliki API anda bisa mengunjungi <a href ="https://developer.twitter.com/en/apps">Twitter Dev App</a> untuk pengajuan API-nya.
-<br>
-Contoh :<br>
-<strong>API.txt</strong>
-```
-consumer_key = "2NBRV4vm#################"
-consumer_secret = "jVe6ujjn7yqc6mZmHqHxOqS###################"
-access_token = "as254as1das2######################"
-access_token_secret = "asd214wq4g4r4y2t6####################"
-```
-<p style="font-size : 10pt">Note : Isi ruang diantara dua kutip(").</p>
 
-### 3. Run ~ run ~
-### <strong>Crawl Twitter</strong><br>
-Arg : Banyak Tweet target. `python Crawl_Twitter.py N`<br>
-<strong>Contoh</strong>
-```
-python Crawl_Twitter.py 100000
-```
-<p style="font-size : 10pt">Note : Jika N tidak dispesifikasikan maka program akan memasuki endless loop.</p>
+Edit `API.json` menggunakan kode yang didapat dari pihak twitter. Jika belum memiliki API anda bisa mengunjungi [Twitter Dev App](https://developer.twitter.com/en/apps) untuk mengajukan application.
 
-### <strong>Main</strong><br>
-Run dengan default option.
-* N (Banyak Tweet) = `True` ~ Endless loop
-* Export = False
+Contoh :
+
+`API.json`
+
+```json
+{
+     consumer_key: "2NBRV4vm#################",
+     consumer_secret: "jVe6ujjn7yqc6mZmHqHxOqS###################",
+     access_token: "as254as1das2######################",
+     access_token_secret: "asd214wq4g4r4y2t6####################"
+}
 ```
-python Main.py
-```
-Set banyak tweet dan Export. `python Main.py N EXPORT`<br>
-<strong>Contoh</strong>
-```
-python Main.py 1000 True
-```
+
+### 3. Running scripts
+
+1. Crawl Twitter menggunakan `tweepy`<br>
+   Melakukan crawling tentang `covid` pada user tweeter yang berada diwilayah DKI Jakarta. Anda dapat melakukan running pada `crawler.py` dengan menambahkan argumen `N` atau banyaknya data yang akan di ambil. Contoh :
+
+   | OS | Command |
+   | -- | ------- |
+   | Linux | `python crawler.py 1000` |
+   | windows | `py crawler.py 1000` |
+
+2. Sentiment Analisis<br>
+   Melakukan sentimen analisis menggunakan model yang sudah di train sebelumnya. Anda dapat melakukan running pada `main.py` dengan menambahkan beberapa argumen seperti:
+
+   * `N` : Banyaknya data yang akan dicrawl
+   * `-e` : Export data menjadi file `csv` [OPTIONAL]
+   
+   Contoh :
+
+   | OS | Command |
+   | -- | ------- |
+   | Linux | `python main.py 1000` atau `python main.py 1000 -e` |
+   | windows | `py main.py 1000` atau `py main.py 1000 -e` |

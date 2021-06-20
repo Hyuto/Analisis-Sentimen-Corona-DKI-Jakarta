@@ -1,9 +1,70 @@
-import sys, os
+import sys, os, re, string, pickle
 import tweepy
-import analizer as ana
 from pandas import DataFrame
 from API import API
 from datetime import datetime
+from nltk.tokenize import word_tokenize
+from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
+
+# Create Sastrawi stemmer
+STEMMER = StemmerFactory().create_stemmer()
+
+# Create Stopword
+with open("kamus/Stopword.txt", "r") as f:
+    STOPWORDS = f.readline().split()
+
+# Cleanner 
+def cleaning(text):
+    text= text[2:]
+    text = text.replace('\\n',' ')
+    return text
+
+# Preprocessor
+def preprocessor(text):
+    # Convert to lower case
+    text = text.lower()
+    # Remove additional code
+    text = text.replace('\\xe2\\x80\\xa6', '')
+    # Convert www.* or https?://* to URL
+    text = re.sub('((www\.[^\s]+)|(https?://[^\s]+))','',text)
+    # Convert @username to AT_USER
+    text = re.sub('@[^\s]+','',text)
+    # Remove additional white spaces
+    text = re.sub('[\s]+', ' ', text)
+    # Replace #word with word
+    text = re.sub(r'#([^\s]+)', r'\1',text)
+    # Menghapus angka dari teks
+    text = re.sub(r"\d+", "", text)
+    # Menganti tanda baca dengan spasi
+    text = text.translate(str.maketrans(string.punctuation, ' ' * len(string.punctuation)))
+    return text
+
+# Tokenizer
+def tokenizer(text):
+    words = word_tokenize(text)
+    tokens=[]
+    for w in words:
+        # add tokens
+        if len(w) > 3:
+            w = STEMMER.stem(w)
+            tokens.append(w.lower())
+    return tokens
+
+# Load saved vectorizer
+vectorizer_tfidf = pickle.load(open('model/vectorizer/vectorizer_tfidf.pickle', 'rb'))
+
+# Load Model
+model = pickle.load(open('model/[TRAINED] Random Forest Classifier.pickle', 'rb'))
+
+def analyst(string) :
+    """ Analyst """
+    string = cleaning(string)
+    string = preprocessor(string)
+    string = tokenizer(string)
+    
+    string = vectorizer_tfidf.transform(string)
+
+    print(model.predict(string))
 
 def args_prep(args):
     """ Preprocess args """
@@ -60,7 +121,7 @@ if __name__ == '__main__':
     for tweet in tweepy.Cursor(api.search, q=query, tweet_mode='extended', 
                                 count = 200, geocode ='-6.213621,106.832673,20km',
                                 lang = "id").items(n):
-        s = ana.analyst(tweet.full_text)
+        s = analyst(tweet.full_text)
         tweetan.append(tweet.full_text)
         sentimen.append(s)
         

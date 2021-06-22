@@ -11,7 +11,7 @@ STEMMER = StemmerFactory().create_stemmer()
 
 # Create Stopword
 with open("kamus/Stopword.txt", "r") as f:
-    STOPWORDS = f.readline().split()
+    stop_words = f.readline().split()
 
 # Cleanner 
 def cleaning(text):
@@ -45,26 +45,31 @@ def tokenizer(text):
     tokens=[]
     for w in words:
         # add tokens
-        if len(w) > 3:
+        w = w.lower()
+        if len(w) > 3 and w not in stop_words:
             w = STEMMER.stem(w)
-            tokens.append(w.lower())
+            tokens.append(w)
     return tokens
 
 # Load saved vectorizer
 vectorizer_tfidf = pickle.load(open('model/vectorizer/vectorizer_tfidf.pickle', 'rb'))
 
 # Load Model
-model = pickle.load(open('model/[TRAINED] Random Forest Classifier.pickle', 'rb'))
+model = pickle.load(open('model/[TRAINED] SVM.pickle', 'rb'))
+
+# Label dictionary
+label = {
+    -1 : 'Negatif',
+    0 : 'Netral',
+    1 : 'Positif'
+}
 
 def analyst(string) :
     """ Analyst """
-    string = cleaning(string)
-    string = preprocessor(string)
-    string = tokenizer(string)
-    
+    string = [cleaning(string)]
     string = vectorizer_tfidf.transform(string)
 
-    print(model.predict(string))
+    return label[model.predict(string)[0]]
 
 def args_prep(args):
     """ Preprocess args """

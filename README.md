@@ -74,3 +74,12 @@ Contoh :
    | -- | ------- |
    | Linux | `python main.py 1000` atau `python main.py 1000 -e` |
    | windows | `py main.py 1000` atau `py main.py 1000 -e` |
+
+## Note
+
+Jika terdapat error pada pengimportan library `nltk` run script `nltk-handler.py`
+
+| OS | Command |
+| -- | ------- |
+| Linux | `python nltk-handler.py` |
+| windows | `py nltk-handler.py` |

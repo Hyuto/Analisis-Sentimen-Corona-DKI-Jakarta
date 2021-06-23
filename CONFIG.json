@@ -1,0 +1,21 @@
+{
+    "TWEETER-API": {
+        "consumer_key": "CONSUMER-KEY",
+        "consumer_secret": "CONSUMER-SECRET",
+        "access_token": "ACCESS-TOKEN",
+        "access_token_secret": "ACCESS-TOKEN-SECRET"
+    },
+
+    "VECTORIZER": {
+        "path": "model/vectorizer/[TRAINED] TF-IDF Vectorizer.pickle"
+    },
+
+    "MODEL": {
+        "path" : "model/[TRAINED] SVM.pickle"
+    },
+
+    "SEARCH-PLAN": {
+        "query" : "#corona OR covid OR Covid19 OR #DiRumahAja OR #quarantine OR Corona OR DiRumahAja OR wabah OR pandemi OR quarantine",
+        "geocode" : "-6.213621,106.832673,20km"
+    }
+}

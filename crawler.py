@@ -1,7 +1,7 @@
-import tweepy, sys, os
+import argparse, os, tweepy
 import pandas as pd
 from datetime import datetime
-from API import API
+from config import CONFIG
 
 def to_csv(tweetan, tanggal, teks, Id, sn, source, rtc, rts, hashtag):
     """Mengeksport data menjadi file csv
@@ -27,28 +27,34 @@ def to_csv(tweetan, tanggal, teks, Id, sn, source, rtc, rts, hashtag):
         'Retweet Status': rts,
         'Hashtags': hashtag
     })
-    data.to_csv(f'output/Crawl Twitter Jakarta {datetime.today().strftime("%Y-%m-%d")}.csv', index=False)
+
+    file_name, i = f'output/Crawl Twitter Jakarta {datetime.today().strftime("%Y-%m-%d")}', 1
+    while os.path.isfile(file_name + '.csv'):
+        file_name = f'output/Crawl Twitter Jakarta {datetime.today().strftime("%Y-%m-%d")} ({i})'
+        i += 1
+    data.to_csv(file_name + '.csv', index=False)
 
 if __name__ == '__main__':
-    try:
-        n = int(sys.argv[1])
-    except:
-        raise KeyError('Harus menspesifikasikan "N" (Banyaknya data yang akan dicrawl)')
+    parser = argparse.ArgumentParser(description="Script untuk melakukan crawling \
+                                                  tweet terbaru mengenai corona")
+    parser.add_argument("-n",
+                        "--number",
+                        help="Banyak tweet yang akan di crawl.",
+                        type=int, 
+                        required = True)
+    args = parser.parse_args()
 
     # Key
-    api = API('API.json').data
-    consumer_key = api['consumer_key']
-    consumer_secret = api['consumer_secret']
-    access_token = api['access_token']
-    access_token_secret = api['access_token_secret']
+    config = CONFIG('CONFIG.json').data
+    consumer_key = config['TWEETER-API']['consumer_key']
+    consumer_secret = config['TWEETER-API']['consumer_secret']
+    access_token = config['TWEETER-API']['access_token']
+    access_token_secret = config['TWEETER-API']['access_token_secret']
 
     # Auth & API
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
     api = tweepy.API(auth,wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
-
-    # Query
-    query = '#corona OR covid OR Covid19 OR #DiRumahAja OR #quarantine OR Corona OR DiRumahAja OR wabah OR pandemi OR quarantine'
 
     # Lists
     tweetan=[]
@@ -62,11 +68,9 @@ if __name__ == '__main__':
     hashtag =[]
 
     # Crawl using tweepy
-    for tweet in tweepy.Cursor(api.search, q=query, tweet_mode='extended', count = 200, geocode ='-6.213621,106.832673,20km',
-                                lang = "id").items(n):
-        # Logging
-        print(tweet.created_at, tweet.full_text)
-
+    for tweet in tweepy.Cursor(api.search, q=config['SEARCH-PLAN']['query'], tweet_mode='extended', 
+                                count = 200, geocode=config['SEARCH-PLAN']['geocode'],
+                                lang = "id").items(args.number):
         # Appends 
         tweetan.append(tweet)
         tanggal.append(tweet.created_at) 
@@ -81,16 +85,15 @@ if __name__ == '__main__':
         else :
             rts.append(0)
         
-        # Count Logging
-        print(f'Tweet count : {len(Id)}')
+        # Logging
+        text = tweet.full_text
+        if len(text) > 65:
+            text = text[:65] + '...'
+        print(f'{len(Id)} : {tweet.created_at} : {repr(text)}')
 
     # Check if output directory is available
     if not os.path.isdir('output'):
         os.mkdir('output')
 
-    # Export to json
-    data_json = pd.DataFrame(tweetan)
-    data_json.to_json(f'output/Crawl Twitter Jakarta {datetime.today().strftime("%Y-%m-%d")}.json')
-
-    # Export to csv
+    # Export
     to_csv(tweetan, tanggal, teks, Id, sn, source, rtc, rts, hashtag)

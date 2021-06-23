@@ -1,6 +1,6 @@
 import json
 
-class API(object):
+class CONFIG(object):
     """ Load & Preprocess API.json """
     def __init__(self, text):
         with open(text, 'r') as f:

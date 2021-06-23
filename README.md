@@ -1,5 +1,7 @@
 # Analisis Sentimen Twitter Corona DKI Jakarta
 
+![](https://img.shields.io/badge/Made%20with-Python-green&logo=python) [![](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://www.linkedin.com/in/wahyu-setianto/)
+
 UTS Big Data : Analisis Sentimen Twitter untuk mengetahui Dampak dari Pandemi COVID-19 terhadap masyarakat Jakarta menggunakan TF-IDF Vectorizer &amp; SVM
 
 <img src="assets/Wordcloud.png"
@@ -7,8 +9,6 @@ UTS Big Data : Analisis Sentimen Twitter untuk mengetahui Dampak dari Pandemi CO
      style="display:block;float:none;margin-left:auto;margin-right:auto;width:70%" />
 
 ## Run on Local
-
-<hr />
 
 ### 1. Clone repository ini
 
@@ -37,43 +37,58 @@ Tahap selanjutnya adalah install library yang dibutuhkan.
 
 ### 2. Twitter API
 
-Edit `API.json` menggunakan kode yang didapat dari pihak twitter. Jika belum memiliki API anda bisa mengunjungi [Twitter Dev App](https://developer.twitter.com/en/apps) untuk mengajukan application.
+Edit `CONFIG.json` menggunakan kode yang didapat dari pihak twitter. Jika belum memiliki API anda bisa mengunjungi [Twitter Dev App](https://developer.twitter.com/en/apps) untuk mengajukan application.
 
 Contoh :
 
-`API.json`
+`CONFIG.json`
 
 ```json
 {
-     consumer_key: "2NBRV4vm#################",
-     consumer_secret: "jVe6ujjn7yqc6mZmHqHxOqS###################",
-     access_token: "as254as1das2######################",
-     access_token_secret: "asd214wq4g4r4y2t6####################"
+   "TWEETER-API": {
+      consumer_key: "2NBRV4vm#################",
+      consumer_secret: "jVe6ujjn7yqc6mZmHqHxOqS###################",
+      access_token: "as254as1das2######################",
+      access_token_secret: "asd214wq4g4r4y2t6####################"
+   },
+
+   ...
 }
 ```
 
 ### 3. Running scripts
 
 1. Crawl Twitter menggunakan `tweepy`<br>
-   Melakukan crawling tentang `covid` pada user tweeter yang berada diwilayah DKI Jakarta. Anda dapat melakukan running pada `crawler.py` dengan menambahkan argumen `N` atau banyaknya data yang akan di ambil. Contoh :
+   Melakukan crawling tentang `covid` pada user tweeter yang berada diwilayah DKI Jakarta. Anda dapat melakukan running pada `crawler.py` dengan menambahkan argumen `n` atau banyaknya data yang akan di ambil. Contoh :
 
    | OS | Command |
    | -- | ------- |
-   | Linux | `python crawler.py 1000` |
-   | windows | `py crawler.py 1000` |
+   | Linux | `python crawler.py -n 1000` |
+   | windows | `py crawler.py -n 1000` |
 
 2. Sentiment Analisis<br>
    Melakukan sentimen analisis menggunakan model yang sudah di train sebelumnya. Anda dapat melakukan running pada `main.py` dengan menambahkan beberapa argumen seperti:
 
-   * `N` : Banyaknya data yang akan dicrawl
+   * `n` : Banyaknya data yang akan dicrawl
    * `-e` : Export data menjadi file `csv` [OPTIONAL]
    
    Contoh :
 
    | OS | Command |
    | -- | ------- |
-   | Linux | `python main.py 1000` atau `python main.py 1000 -e` |
-   | windows | `py main.py 1000` atau `py main.py 1000 -e` |
+   | Linux | `python main.py -n 1000` atau `python main.py -n 1000 -e` |
+   | windows | `py main.py -n 1000` atau `py main.py -n 1000 -e` |
+
+## Magic `CONFIG.json`
+
+Kustomisasi dapat dilakukan dengan mengedit `CONFIG.json`
+
+1. `"TWEETER-API"` : Bagian wajib yang harus diisi dengan key yang telah anda dapatkan dari pihak tweeter.
+2. `"VECTORIZER"` : Bagian yang mencangkup `path` atau letak file pickle vectorizer yang telah dilakukan *fitting* untuk diload.
+3. `"MODEL"` : Bagian yang mencangkup `path` atau letak file pickle model yang telah dilatih  untuk diload. **Note** : Terdapat beberapa model yang telah dilatih di dalam folder `model`
+4. `"SEARCH-PLAN"` : Bagian yang mengatur pencarian/crawling tweet.
+   * `"query"` : Query pencarian tweet. Tweet yang dicari akan mengandung kata - kata yang terdapat dalam `query`
+   * `"geocode"` : Geocode/letak tweet yang akan dicari dalam format `"longitude,latitude,jari-jari"`
 
 ## Note
 

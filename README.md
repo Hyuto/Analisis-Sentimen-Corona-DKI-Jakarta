@@ -1,6 +1,6 @@
 # Analisis Sentimen Twitter Corona DKI Jakarta
 
-![](https://img.shields.io/badge/Made%20with-Python-green&logo=python) [![](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://www.linkedin.com/in/wahyu-setianto/)
+![](https://img.shields.io/badge/Made%20with-Python-green?style=flat&logo=Python) [![](https://img.shields.io/badge/Notebook-disini-orange?style=flat&logo=Jupyter)](./notebook) [![](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://www.linkedin.com/in/wahyu-setianto/)
 
 UTS Big Data : Analisis Sentimen Twitter untuk mengetahui Dampak dari Pandemi COVID-19 terhadap masyarakat Jakarta menggunakan TF-IDF Vectorizer &amp; SVM
 
@@ -18,7 +18,7 @@ Clone / download repo ini. Anda dapat menggunakan `git` untuk melakukan hal ini.
 git clone https://github.com/Hyuto/Analisis-Sentimen-Corona-DKI-Jakarta.git
 ```
 
-Anda juga dapat mendownload repo ini dengan klik tombol code (pojok kanan atas) dan pilih `Download ZIP` untuk mendowload repo ini sebagai ZIP file lalu extract file tersebut.
+Anda juga dapat mendownload repo ini dengan klik tombol `code` (pojok kanan atas) dan pilih `Download ZIP` untuk mendowload repo ini sebagai ZIP file lalu extract file tersebut.
 
 Selanjutnya anda bisa langsung `cd` ke-main directory.
 

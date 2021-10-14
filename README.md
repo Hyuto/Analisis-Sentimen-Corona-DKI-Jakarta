@@ -30,9 +30,9 @@ cd Analisis-Sentimen-Corona-DKI-Jakarta
 
 Tahap selanjutnya adalah install library yang dibutuhkan.
 
-| OS | Command |
-| -- | ------- |
-| Linux | `pip install -r requirements.txt` |
+| OS      | Command                                        |
+| ------- | ---------------------------------------------- |
+| Linux   | `pip install -r requirements.txt`              |
 | windows | `py -m pip install --user -r requirements.txt` |
 
 ### 2. Twitter API
@@ -61,40 +61,40 @@ Contoh :
 1. Crawl Twitter menggunakan `tweepy`<br>
    Melakukan crawling tentang `covid` pada user tweeter yang berada diwilayah DKI Jakarta. Anda dapat melakukan running pada `crawler.py` dengan menambahkan argumen `n` atau banyaknya data yang akan di ambil. Contoh :
 
-   | OS | Command |
-   | -- | ------- |
-   | Linux | `python crawler.py -n 1000` |
-   | windows | `py crawler.py -n 1000` |
+   | OS      | Command                     |
+   | ------- | --------------------------- |
+   | Linux   | `python crawler.py -n 1000` |
+   | windows | `py crawler.py -n 1000`     |
 
 2. Sentiment Analisis<br>
    Melakukan sentimen analisis menggunakan model yang sudah di train sebelumnya. Anda dapat melakukan running pada `main.py` dengan menambahkan beberapa argumen seperti:
 
-   * `n` : Banyaknya data yang akan dicrawl
-   * `-e` : Export data menjadi file `csv` [OPTIONAL]
-   
+   - `n` : Banyaknya data yang akan dicrawl
+   - `-e` : Export data menjadi file `csv` [OPTIONAL]
+
    Contoh :
 
-   | OS | Command |
-   | -- | ------- |
-   | Linux | `python main.py -n 1000` atau `python main.py -n 1000 -e` |
-   | windows | `py main.py -n 1000` atau `py main.py -n 1000 -e` |
+   | OS      | Command                                                   |
+   | ------- | --------------------------------------------------------- |
+   | Linux   | `python main.py -n 1000` atau `python main.py -n 1000 -e` |
+   | windows | `py main.py -n 1000` atau `py main.py -n 1000 -e`         |
 
 ## Magic `CONFIG.json`
 
 Kustomisasi dapat dilakukan dengan mengedit `CONFIG.json`
 
 1. `"TWEETER-API"` : Bagian wajib yang harus diisi dengan key yang telah anda dapatkan dari pihak tweeter.
-2. `"VECTORIZER"` : Bagian yang mencangkup `path` atau letak file pickle vectorizer yang telah dilakukan *fitting* untuk diload.
-3. `"MODEL"` : Bagian yang mencangkup `path` atau letak file pickle model yang telah dilatih  untuk diload. **Note** : Terdapat beberapa model yang telah dilatih di dalam folder `model`
+2. `"VECTORIZER"` : Bagian yang mencangkup `path` atau letak file pickle vectorizer yang telah dilakukan _fitting_ untuk diload.
+3. `"MODEL"` : Bagian yang mencangkup `path` atau letak file pickle model yang telah dilatih untuk diload. **Note** : Terdapat beberapa model yang telah dilatih di dalam folder `model`
 4. `"SEARCH-PLAN"` : Bagian yang mengatur pencarian/crawling tweet.
-   * `"query"` : Query pencarian tweet. Tweet yang dicari akan mengandung kata - kata yang terdapat dalam `query`
-   * `"geocode"` : Geocode/letak tweet yang akan dicari dalam format `"longitude,latitude,jari-jari"`
+   - `"query"` : Query pencarian tweet. Tweet yang dicari akan mengandung kata - kata yang terdapat dalam `query`
+   - `"geocode"` : Geocode/letak tweet yang akan dicari dalam format `"longitude,latitude,jari-jari"`
 
 ## Note
 
 Jika terdapat error pada pengimportan library `nltk` run script `nltk-handler.py`
 
-| OS | Command |
-| -- | ------- |
-| Linux | `python nltk-handler.py` |
-| windows | `py nltk-handler.py` |
+| OS      | Command                  |
+| ------- | ------------------------ |
+| Linux   | `python nltk-handler.py` |
+| windows | `py nltk-handler.py`     |

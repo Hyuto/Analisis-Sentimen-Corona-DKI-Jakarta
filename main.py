@@ -58,7 +58,7 @@ vectorizer_tfidf = pickle.load(open(config["VECTORIZER"]["path"], "rb"))
 model = pickle.load(open(config["MODEL"]["path"], "rb"))
 
 # Label dictionary
-label = {-1: "Negatif", 0: "Netral", 1: "Positif"}
+label = {0: "Negatif", 1: "Netral", 2: "Positif"}
 
 
 def analyst(string):

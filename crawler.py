@@ -1,7 +1,7 @@
 import argparse, os, tweepy
 import pandas as pd
 from datetime import datetime
-from config import CONFIG
+from utils import CONFIG
 
 
 def to_csv(tweetan, tanggal, teks, Id, sn, source, rtc, rts, hashtag):
@@ -49,11 +49,11 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Key
-    config = CONFIG("CONFIG.json").data
-    consumer_key = config["TWEETER-API"]["consumer_key"]
-    consumer_secret = config["TWEETER-API"]["consumer_secret"]
-    access_token = config["TWEETER-API"]["access_token"]
-    access_token_secret = config["TWEETER-API"]["access_token_secret"]
+    config = CONFIG("config.json").data
+    consumer_key = config["TWITTER-API"]["consumer_key"]
+    consumer_secret = config["TWITTER-API"]["consumer_secret"]
+    access_token = config["TWITTER-API"]["access_token"]
+    access_token_secret = config["TWITTER-API"]["access_token_secret"]
 
     # Auth & API
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)

@@ -26,7 +26,16 @@ Selanjutnya anda bisa langsung `cd` ke-main directory.
 cd Analisis-Sentimen-Corona-DKI-Jakarta
 ```
 
-### 2. Install Requirements
+### 2. Setup virtual environment
+
+Tahap selanjutnya adalah setup `virtualenv`.
+
+| OS      | Command               |
+| ------- | --------------------- |
+| Linux   | `python3 -m venv env` |
+| windows | `py -m venv env`      |
+
+### 3. Install Requirements
 
 Tahap selanjutnya adalah install library yang dibutuhkan.
 
@@ -35,17 +44,17 @@ Tahap selanjutnya adalah install library yang dibutuhkan.
 | Linux   | `pip install -r requirements.txt`              |
 | windows | `py -m pip install --user -r requirements.txt` |
 
-### 2. Twitter API
+### 4. Twitter API
 
-Edit `CONFIG.json` menggunakan kode yang didapat dari pihak twitter. Jika belum memiliki API anda bisa mengunjungi [Twitter Dev App](https://developer.twitter.com/en/apps) untuk mengajukan application.
+Edit `config.json` menggunakan kode yang didapat dari pihak twitter. Jika belum memiliki API anda bisa mengunjungi [Twitter Dev App](https://developer.twitter.com/en/apps) untuk mengajukan application.
 
 Contoh :
 
-`CONFIG.json`
+`config.json`
 
 ```json
 {
-   "TWEETER-API": {
+   "TWITTER-API": {
       consumer_key: "2NBRV4vm#################",
       consumer_secret: "jVe6ujjn7yqc6mZmHqHxOqS###################",
       access_token: "as254as1das2######################",
@@ -56,7 +65,7 @@ Contoh :
 }
 ```
 
-### 3. Running scripts
+### 5. Running scripts
 
 1. Crawl Twitter menggunakan `tweepy`<br>
    Melakukan crawling tentang `covid` pada user tweeter yang berada diwilayah DKI Jakarta. Anda dapat melakukan running pada `crawler.py` dengan menambahkan argumen `n` atau banyaknya data yang akan di ambil. Contoh :
@@ -79,11 +88,11 @@ Contoh :
    | Linux   | `python main.py -n 1000` atau `python main.py -n 1000 -e` |
    | windows | `py main.py -n 1000` atau `py main.py -n 1000 -e`         |
 
-## Magic `CONFIG.json`
+## Magic `config.json`
 
-Kustomisasi dapat dilakukan dengan mengedit `CONFIG.json`
+Kustomisasi dapat dilakukan dengan mengedit `config.json`
 
-1. `"TWEETER-API"` : Bagian wajib yang harus diisi dengan key yang telah anda dapatkan dari pihak tweeter.
+1. `"TWITTER-API"` : Bagian wajib yang harus diisi dengan key yang telah anda dapatkan dari pihak tweeter.
 2. `"VECTORIZER"` : Bagian yang mencangkup `path` atau letak file pickle vectorizer yang telah dilakukan _fitting_ untuk diload.
 3. `"MODEL"` : Bagian yang mencangkup `path` atau letak file pickle model yang telah dilatih untuk diload. **Note** : Terdapat beberapa model yang telah dilatih di dalam folder `model`
 4. `"SEARCH-PLAN"` : Bagian yang mengatur pencarian/crawling tweet.

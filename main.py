@@ -1,13 +1,13 @@
 import argparse, os, re, string, pickle
 import tweepy
 from pandas import DataFrame
-from config import CONFIG
+from utils import CONFIG
 from datetime import datetime
 from nltk.tokenize import word_tokenize
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
 # Configuration
-config = CONFIG("CONFIG.json").data
+config = CONFIG("config.json").data
 
 # Create Sastrawi stemmer
 STEMMER = StemmerFactory().create_stemmer()
@@ -83,10 +83,10 @@ if __name__ == "__main__":
     print(f"[INFO] Running on N : {args.number} & Export : {args.export}\n")
 
     # Tweeter API
-    consumer_key = config["TWEETER-API"]["consumer_key"]
-    consumer_secret = config["TWEETER-API"]["consumer_secret"]
-    access_token = config["TWEETER-API"]["access_token"]
-    access_token_secret = config["TWEETER-API"]["access_token_secret"]
+    consumer_key = config["TWITTER-API"]["consumer_key"]
+    consumer_secret = config["TWITTER-API"]["consumer_secret"]
+    access_token = config["TWITTER-API"]["access_token"]
+    access_token_secret = config["TWITTER-API"]["access_token_secret"]
 
     # Authentication
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)

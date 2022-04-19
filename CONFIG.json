@@ -1,5 +1,5 @@
 {
-  "TWEETER-API": {
+  "TWITTER-API": {
     "consumer_key": "CONSUMER-KEY",
     "consumer_secret": "CONSUMER-SECRET",
     "access_token": "ACCESS-TOKEN",

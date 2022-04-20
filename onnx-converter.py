@@ -25,7 +25,8 @@ def converter(split: bool, output: str, config: dict):
 
         logging.info("Converting model...")
         initial_type = [("words", StringTensorType([None, 1]))]
-        onnx_model = convert_sklearn(model, initial_types=initial_type)
+        options = {"model": {"zipmap": False}}
+        onnx_model = convert_sklearn(model, initial_types=initial_type, options=options)
         with open(os.path.join(output, "model.onnx"), "wb") as writer:
             writer.write(onnx_model.SerializeToString())
         check_model(onnx_model)
@@ -41,7 +42,8 @@ def converter(split: bool, output: str, config: dict):
 
         logging.info("Converting Main Model...")
         initial_type = [("words_mat", FloatTensorType([None, 1000]))]
-        onnx_model = convert_sklearn(main_model, initial_types=initial_type)
+        options = {"zipmap": False}
+        onnx_model = convert_sklearn(main_model, initial_types=initial_type, options=options)
         with open(os.path.join(output, "main-model.onnx"), "wb") as writer:
             writer.write(onnx_model.SerializeToString())
         check_model(onnx_model)

@@ -11,6 +11,18 @@ masyarakat Jakarta menggunakan TF-IDF Vectorizer &amp; SVM
      alt="wordcloud"
      style="display:block;float:none;margin-left:auto;margin-right:auto;width:70%" />
 
+## Table of Contents
+
+1. [Run on Local](#run-on-local)
+   - [Clone Repository](#1-clone-repository-ini)
+   - [virtualenv](#2-setup-virtual-environment)
+   - [Dependencies](#3-install-requirements)
+   - [Twitter API](#4-twitter-api)
+   - [Run Scripts](#5-running-scripts)
+2. [Web Application](#web-app)
+3. [Configurations](#magic-configjson)
+4. [ONNX support](#convert-model-to-onnx)
+
 ## Run on Local
 
 ### 1. Clone repository ini
@@ -97,6 +109,11 @@ Contoh :
    | ------- | --------------------------------------------------------- |
    | Linux   | `python main.py -n 1000` atau `python main.py -n 1000 -e` |
    | windows | `py main.py -n 1000` atau `py main.py -n 1000 -e`         |
+
+## Web Application
+
+Anda dapat mencoba model yang sudah dilatih dari penelitian ini secara langsung di
+[Sentiment Detector](https://hyuto.github.io/showcase/sa-corona)
 
 ## Magic `config.json`
 

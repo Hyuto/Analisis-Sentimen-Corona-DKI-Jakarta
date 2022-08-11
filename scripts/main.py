@@ -1,34 +1,25 @@
-import argparse, os, re, string, pickle
+import argparse
+import os
+import pickle
+import re
+import string
+from datetime import datetime
+
 import tweepy
 from pandas import DataFrame
-from utils import CONFIG
-from datetime import datetime
-from nltk.tokenize import word_tokenize
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
+from utils import CONFIG
 
-# Configuration
-config = CONFIG("config.json").data
 
-# Create Sastrawi stemmer
 STEMMER = StemmerFactory().create_stemmer()
-
-# Create Stopword
 with open("kamus/Stopword.txt", "r") as f:
-    stopwords = f.readline().split()
-
-# Cleanner
-def cleaning(text):
-    text = text[2:]
-    text = text.replace("\\n", " ")
-    return text
-
+    STOPWORDS = f.readline().split()
 
 # Preprocessor
-def preprocessor(text):
+def preprocessing(text):
     # Convert to lower case
     text = text.lower()
-    # Remove additional code
-    text = text.replace("\\xe2\\x80\\xa6", "")
+    text = " ".join(text.split())
     # Convert www.* or https?://* to URL
     text = re.sub("((www\.[^\s]+)|(https?://[^\s]+))", "", text)
     # Convert @username to AT_USER
@@ -80,31 +71,7 @@ if __name__ == "__main__":
     parser.add_argument("-e", "--export", help="Notasi export", action="store_true")
     args = parser.parse_args()
 
-    print(f"[INFO] Running on N : {args.number} & Export : {args.export}\n")
-
-    # Tweeter API
-    consumer_key = config["TWITTER-API"]["consumer_key"]
-    consumer_secret = config["TWITTER-API"]["consumer_secret"]
-    access_token = config["TWITTER-API"]["access_token"]
-    access_token_secret = config["TWITTER-API"]["access_token_secret"]
-
-    # Authentication
-    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-    auth.set_access_token(access_token, access_token_secret)
-    api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
-
-    # Data : tweet & sentiment
-    tweetan, sentimen = [], []
-
-    # Search / crawl
-    for tweet in tweepy.Cursor(
-        api.search,
-        q=config["SEARCH-PLAN"]["query"],
-        tweet_mode="extended",
-        count=200,
-        geocode=config["SEARCH-PLAN"]["geocode"],
-        lang="id",
-    ).items(args.number):
+    
         s = analyst(tweet.full_text)
         tweetan.append(tweet.full_text)
         sentimen.append(s)

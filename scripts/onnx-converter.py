@@ -1,7 +1,8 @@
-import os
 import argparse
 import logging
+import os
 import pickle
+
 from onnx.checker import check_model
 from skl2onnx import convert_sklearn
 from skl2onnx.common.data_types import StringTensorType

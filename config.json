@@ -1,9 +1,9 @@
 {
   "TWITTER-API": {
-    "consumer_key": "CONSUMER-KEY",
-    "consumer_secret": "CONSUMER-SECRET",
-    "access_token": "ACCESS-TOKEN",
-    "access_token_secret": "ACCESS-TOKEN-SECRET"
+    "consumer_key": "w9jGpMDFy37g9sjNvRLMmMQmI",
+    "consumer_secret": "AjMqbCiH0cJnp7sQiVt3D9jxUXrIrMDpkZQVBl3WWRbRfFIgba",
+    "access_token": "1240469132551708672-gKwrq8swPZecC9VgbNsV3HGRABfqeR",
+    "access_token_secret": "CnUrAkKqjJn5Ux6Ze77B4D9VVNZxx4jEMUrkEuISLwJaj"
   },
 
   "VECTORIZER": {

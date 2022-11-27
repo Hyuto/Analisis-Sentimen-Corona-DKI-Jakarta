@@ -10,7 +10,6 @@ from pandas import DataFrame
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 from utils import CONFIG
 
-
 STEMMER = StemmerFactory().create_stemmer()
 with open("kamus/Stopword.txt", "r") as f:
     STOPWORDS = f.readline().split()
@@ -71,16 +70,15 @@ if __name__ == "__main__":
     parser.add_argument("-e", "--export", help="Notasi export", action="store_true")
     args = parser.parse_args()
 
-    
-        s = analyst(tweet.full_text)
-        tweetan.append(tweet.full_text)
-        sentimen.append(s)
+    s = analyst(tweet.full_text)
+    tweetan.append(tweet.full_text)
+    sentimen.append(s)
 
-        # Logging
-        text = tweet.full_text
-        if len(text) > 65:
-            text = text[:65] + "..."
-        print(f"{len(sentimen)} : {repr(text)} : {s}")
+    # Logging
+    text = tweet.full_text
+    if len(text) > 65:
+        text = text[:65] + "..."
+    print(f"{len(sentimen)} : {repr(text)} : {s}")
 
     # Export
     if args.export:

@@ -28,8 +28,4 @@ repos:
         language: system
         entry: isort --check-only .
         types: [python]
-      - id: mypy
-        name: typechecking using mypy
-        language: system
-        entry: mypy scripts/ --no-incremental --ignore-missing-imports
-        pass_filenames: false
+      

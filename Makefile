@@ -1,6 +1,5 @@
 clean:
-	find . | grep -E '(__pycache__|\.pyc|\.lprof|\.pytest_cache|\.ipynb_checkpoints|\.mypy_cache)' | \
-	xargs rm -rf
+	poetry run python -m src clean
 
 format:
 	poetry run isort .
@@ -14,10 +13,10 @@ local-notebook:
 	poetry run jupyter notebook --no-browser
 
 test:
-	poetry run pytest --cov=scripts/ -v
+	poetry run pytest --cov=src/ -v
 
 typecheck:
-	poetry run mypy scripts/ --no-incremental --ignore-missing-imports
+	poetry run mypy src/ --no-incremental --ignore-missing-imports
 
 setup-dev:
 	poetry install

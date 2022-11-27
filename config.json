@@ -1,9 +1,9 @@
 {
   "TWITTER-API": {
-    "consumer_key": "w9jGpMDFy37g9sjNvRLMmMQmI",
-    "consumer_secret": "AjMqbCiH0cJnp7sQiVt3D9jxUXrIrMDpkZQVBl3WWRbRfFIgba",
-    "access_token": "1240469132551708672-gKwrq8swPZecC9VgbNsV3HGRABfqeR",
-    "access_token_secret": "CnUrAkKqjJn5Ux6Ze77B4D9VVNZxx4jEMUrkEuISLwJaj"
+    "consumer_key": "CChI9FPnnBsvKJWSHUGdqRWfy",
+    "consumer_secret": "rQDKAxIUc23n4EP6HW5qnOG6j5JXYBW7RAUbym78IV7v6PN0ZY",
+    "access_token": "1240469132551708672-Bn89cpxRWtFMOPYnsFnWbNqbv6KtJJ",
+    "access_token_secret": "PxQoyElE74RX6mxhNv1KinlX7t6Flj02nl2u3EP0Mnoiy"
   },
 
   "VECTORIZER": {

@@ -18,9 +18,11 @@ seaborn = "^0.11.2"
 scikit-learn = "^1.1.1"
 PySastrawi = "^1.2.0"
 skl2onnx = "^1.11.2"
-tweepy = "^4.10.0"
 wordcloud = "^1.8.2"
 jupyter = { version = "^1.0.0", optional = true }
+snscrape = "^0.4.3"
+typer = { extras = ["all"], version = "^0.7.0" }
+psutil = "^5.9.4"
 
 [tool.poetry.dev-dependencies]
 black = { extras = ["jupyter"], version = "^22.6.0" }
@@ -39,7 +41,7 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.mypy]
-files = ["scripts"]
+files = ['src']
 show_error_codes = true
 strict = true
 
@@ -58,3 +60,10 @@ extend-exclude = '''
   | kamus
 )/
 '''
+
+[tool.coverage.run]
+omit = ["**/__main__.py"]
+
+[tool.coverage.report]
+show_missing = true
+exclude_lines = ['pragma: no cover', 'if __name__ == "__main__":']

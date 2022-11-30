@@ -1,9 +1,9 @@
+import ast
 import logging
 import re
 import shutil
 from pathlib import Path
 from typing import List, Optional
-from xml.dom import NotFoundErr
 
 import typer
 
@@ -22,6 +22,9 @@ def scrape(
     query: str = typer.Argument(..., help="Query pencarian tweet"),
     lang: str = typer.Option("id", help="Bahasa"),
     max_results: Optional[int] = typer.Option(None, help="Banyak tweet maksimal yang discrape"),
+    geocode: Optional[str] = typer.Option(
+        "-6.213621,106.832673,20km", help="Geocode daerah yang akan di scrape."
+    ),
     since: Optional[str] = typer.Option(
         None, help="Since (batasan awal tanggal tweet) [isoformated date string]"
     ),
@@ -30,7 +33,7 @@ def scrape(
     ),
     export: Optional[str] = typer.Option(None, help="Nama file untuk export tweet hasil scrape"),
     add_features: Optional[str] = typer.Option(
-        None, help='Menambahkan feature yang akan diexport dalam file csv [string separated by ","]'
+        None, help="Menambahkan feature yang akan diexport dalam file csv [json formated string]"
     ),
     denied_users: Optional[str] = typer.Option(
         None,
@@ -40,10 +43,10 @@ def scrape(
     ),
     verbose: bool = typer.Option(True, help="Logging setiap tweet yang discrape"),
 ) -> None:
-    add_features = add_features.split(",") if add_features else []  # type: ignore
+    add_features = ast.literal_eval(add_features) if add_features else {}
     if denied_users:
         if not Path(denied_users).exists():
-            raise NotFoundErr("Denied users file is not found!")
+            raise FileNotFoundError("Denied users file is not found!")
 
     logging.info("Starting scrape commands with args:")
     args = locals()
@@ -52,7 +55,7 @@ def scrape(
 
     from src.scraper import TwitterScraper
 
-    scraper = TwitterScraper(query, lang, since, until)
+    scraper = TwitterScraper(query, lang, geocode, since, until)
     scraper.scrape(
         export=export,
         add_features=add_features,  # type: ignore
@@ -92,7 +95,7 @@ def model_test(
     add_features = add_features.split(",") if add_features else []  # type: ignore
     if denied_users:
         if not Path(denied_users).exists():
-            raise NotFoundErr("Denied users file is not found!")
+            raise FileNotFoundError("Denied users file is not found!")
 
     logging.info("Starting scrape commands with args:")
     args = locals()
@@ -109,6 +112,55 @@ def model_test(
         max_result=max_results,
         verbose=verbose,
     )
+
+
+@main.command(
+    "convert-onnx", help="Mengconvert model yang telah dilatih dalam bentuk pickle ke onnx model"
+)
+def convert_onnx(
+    path: str = typer.Argument(..., help="Path ke model yang akan di convert (pickle formated)"),
+    ort: bool = typer.Option(False, help="Convert ke tipe ort"),
+) -> None:
+    model_path = Path(path)
+    if not model_path.exists():
+        raise FileNotFoundError("Model file is not found!")
+
+    output_dir = main_dir / "output"
+    output_dir.mkdir(exist_ok=True)
+
+    import pickle
+    import subprocess
+    import sys
+
+    from onnx.checker import check_model
+    from skl2onnx import convert_sklearn
+    from skl2onnx.common.data_types import StringTensorType
+    from src.utils import get_name
+
+    model = pickle.load(open(model_path, "rb"))
+
+    logging.info(f"Converting model : {model_path.as_posix()}")
+    onnx_model = convert_sklearn(
+        model,
+        initial_types=[("words", StringTensorType([None, 1]))],
+        options={"svm": {"zipmap": False}},
+    )
+    logging.info(f"Checking onnx model...")
+    check_model(onnx_model)
+
+    filename = get_name((output_dir / "Exported model.onnx").relative_to(main_dir).as_posix())
+    logging.info(f"Exporting onnx model to : {filename}")
+    with open(filename, "wb") as writer:
+        writer.write(onnx_model.SerializeToString())
+
+    if ort:
+        logging.info("Optimizing onnx model to ort...")
+        subprocess.run(
+            f'{sys.executable} -m onnxruntime.tools.convert_onnx_models_to_ort "{(main_dir / filename).absolute()}"',
+            shell=True,
+        )
+
+    logging.info("Done!")
 
 
 @main.command("clean", help="Membersihkan project main directory")

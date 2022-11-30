@@ -6,7 +6,7 @@ import json
 import logging
 from pathlib import Path
 from subprocess import PIPE, Popen
-from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 from src.utils import datetime_validator, get_name, kill_proc_tree
 
@@ -111,7 +111,7 @@ class TwitterScraper:
 
     def scrape(
         self,
-        add_features: Sequence[str] = [],
+        add_features: Dict[str, str] = {},
         denied_users: Optional[str] = None,
         max_result: Optional[int] = None,
         export: Optional[str] = None,
@@ -120,8 +120,8 @@ class TwitterScraper:
         """Running scraping dengan `snscrape`
 
         Args:
-            add_features (Sequence[str]): Menambahkan filter kolom yang akan diexport.
-                Defaults to [].
+            add_features (Dict[str, str]): Menambahkan filter kolom yang akan diexport.
+                Defaults to {}.
             denied_users (Optional[str]): List user yang tweetnya dapat
                 dihiraukan. Dapat berupa pathlike string ke file tempat list user disimpan
                 (json format) atau berupa sequence. Defaults to None.
@@ -131,7 +131,16 @@ class TwitterScraper:
             verbose (bool): Tampilkan tweet yang di scrape di terminal. Defaults to True.
         """
         command = self._get_command()
-        filters = ["date", "url", "user.username", *add_features, "content"]
+        filters = {
+            "tanggal": "date",
+            "tweets": "content",
+            "username": "user.username",
+            "retweet": "retweetCount",
+            "source": "sourceLabel",
+            "hashtags": "hashtags",
+            "url": "url",
+            **add_features,
+        }
         if denied_users is not None:
             denied_users = self._denied_users_handler(denied_users)
 
@@ -142,7 +151,7 @@ class TwitterScraper:
             filename = get_name((path / f"scrape-{export}.csv").as_posix())
             f = open(filename, "w", encoding="utf-8")
             writer = csv.writer(f)
-            writer.writerow(filters)
+            writer.writerow(list(filters.keys()))
 
         logging.info("Scraping...")
         snscrape = Popen(command, stdout=PIPE, stderr=PIPE, shell=True)
@@ -152,8 +161,6 @@ class TwitterScraper:
             index = 1
             for out in snscrape.stdout:
                 temp = self._flatten(json.loads(out))
-                with open("test-result.json", "w") as w:
-                    w.write(json.dumps(temp))
 
                 if denied_users is not None:  # filter username
                     if temp["user.username"] in denied_users:  # pragma: no cover
@@ -168,7 +175,7 @@ class TwitterScraper:
                     print(f"{index} - {temp['date']} - {temp['user.username']} - {content}")
 
                 if export:  # write row
-                    row = [temp[x] for x in filters]
+                    row = [temp[x] for x in filters.values()]
                     writer.writerow(row)
 
                 if max_result:  # brake and kill subprocess
@@ -176,6 +183,9 @@ class TwitterScraper:
                         kill_proc_tree(snscrape.pid)
                         break
                 index += 1
+        except KeyError as e:
+            kill_proc_tree(snscrape.pid)
+            raise e
         except KeyboardInterrupt:  # pragma: no cover
             logging.info("Received exit from user, exiting...")
             kill_proc_tree(snscrape.pid)

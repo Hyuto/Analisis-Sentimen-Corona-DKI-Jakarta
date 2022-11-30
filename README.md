@@ -7,9 +7,9 @@
 UTS Big Data : Analisis Sentimen Twitter untuk mengetahui Dampak dari Pandemi COVID-19 terhadap
 masyarakat Jakarta menggunakan TF-IDF Vectorizer &amp; SVM
 
-<img src="assets/Wordcloud.png"
-     alt="wordcloud"
-     style="display:block;float:none;margin-left:auto;margin-right:auto;width:70%" />
+|                 Positive                 |                 Negative                 |
+| :--------------------------------------: | :--------------------------------------: |
+| ![wc-positive](./assets/wc_positive.png) | ![wc-negative](./assets/wc_negative.png) |
 
 ## Table of Contents
 

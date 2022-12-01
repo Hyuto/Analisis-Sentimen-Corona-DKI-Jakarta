@@ -1,166 +1,98 @@
 # Analisis Sentimen Twitter Corona DKI Jakarta
 
-![](https://img.shields.io/badge/Made%20with-Python-green?style=flat&logo=Python)
-[![](https://img.shields.io/badge/Notebook-disini-orange?style=flat&logo=Jupyter)](./notebook)
-[![](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://www.linkedin.com/in/wahyu-setianto/)
+![love](https://img.shields.io/badge/Made%20with-🖤-white)
+[![Python](https://img.shields.io/badge/Python-≥3.8-green?logo=python)](https://www.python.org/)
+[![Test](https://github.com/Hyuto/Analisis-Sentimen-Corona-DKI-Jakarta/actions/workflows/testing.yaml/badge.svg)](https://github.com/Hyuto/Analisis-Sentimen-Corona-DKI-Jakarta/actions/workflows/testing.yaml)
+[![Lint](https://github.com/Hyuto/Analisis-Sentimen-Corona-DKI-Jakarta/actions/workflows/linting.yaml/badge.svg)](https://github.com/Hyuto/Analisis-Sentimen-Corona-DKI-Jakarta/actions/workflows/linting.yaml)
+[![codecov](https://codecov.io/gh/Hyuto/Analisis-Sentimen-Corona-DKI-Jakarta/branch/master/graph/badge.svg?token=6L0ICORI22)](https://codecov.io/gh/Hyuto/Analisis-Sentimen-Corona-DKI-Jakarta)
 
-UTS Big Data : Analisis Sentimen Twitter untuk mengetahui Dampak dari Pandemi COVID-19 terhadap
-masyarakat Jakarta menggunakan TF-IDF Vectorizer &amp; SVM
+Analisis Sentimen Twitter untuk mengetahui Dampak dari Pandemi COVID-19 terhadap masyarakat Jakarta
+menggunakan TF-IDF Vectorizer &amp; SVM
 
-|                 Positive                 |                 Negative                 |
+|                                          |                                          |
 | :--------------------------------------: | :--------------------------------------: |
 | ![wc-positive](./assets/wc_positive.png) | ![wc-negative](./assets/wc_negative.png) |
-
-## Table of Contents
-
-1. [Run on Local](#run-on-local)
-   - [Clone Repository](#1-clone-repository-ini)
-   - [virtualenv](#2-setup-virtual-environment)
-   - [Dependencies](#3-install-requirements)
-   - [Twitter API](#4-twitter-api)
-   - [Run Scripts](#5-running-scripts)
-2. [Web Application](#web-app)
-3. [Configurations](#magic-configjson)
-4. [ONNX support](#convert-model-to-onnx)
-
-## Run on Local
-
-### 1. Clone repository ini
-
-Clone/download repo ini. Anda dapat menggunakan `git` untuk melakukan hal ini.
-Buka terminal dan run code berikut
-
-```
-git clone https://github.com/Hyuto/Analisis-Sentimen-Corona-DKI-Jakarta.git
-```
-
-Anda juga dapat mendownload repo ini dengan klik tombol `code` (pojok kanan atas) dan pilih
-`Download ZIP` untuk mendowload repo ini sebagai ZIP file lalu extract file tersebut.
-
-Selanjutnya anda bisa langsung `cd` ke-main directory.
-
-```
-cd Analisis-Sentimen-Corona-DKI-Jakarta
-```
-
-### 2. Setup virtual environment
-
-Tahap selanjutnya adalah setup `virtualenv`.
-
-| OS      | Command               |
-| ------- | --------------------- |
-| Linux   | `python3 -m venv env` |
-| windows | `py -m venv env`      |
-
-### 3. Install Requirements
-
-Tahap selanjutnya adalah install library yang dibutuhkan.
-
-| OS      | Command                                        |
-| ------- | ---------------------------------------------- |
-| Linux   | `pip install -r requirements.txt`              |
-| windows | `py -m pip install --user -r requirements.txt` |
-
-### 4. Twitter API
-
-Edit `config.json` menggunakan kode yang didapat dari pihak twitter. Jika belum memiliki API anda
-bisa mengunjungi [Twitter Dev App](https://developer.twitter.com/en/apps) untuk mengajukan
-application.
-
-Contoh :
-
-`config.json`
-
-```json
-{
-   "TWITTER-API": {
-      consumer_key: "2NBRV4vm#################",
-      consumer_secret: "jVe6ujjn7yqc6mZmHqHxOqS###################",
-      access_token: "as254as1das2######################",
-      access_token_secret: "asd214wq4g4r4y2t6####################"
-   },
-
-   ...
-}
-```
-
-### 5. Running scripts
-
-1. Crawl Twitter menggunakan `tweepy`<br>
-   Melakukan crawling tentang `covid` pada user tweeter yang berada diwilayah DKI Jakarta.
-   Anda dapat melakukan running pada `crawler.py` dengan menambahkan argumen `n` atau banyaknya
-   data yang akan di ambil. Contoh :
-
-   | OS      | Command                     |
-   | ------- | --------------------------- |
-   | Linux   | `python crawler.py -n 1000` |
-   | windows | `py crawler.py -n 1000`     |
-
-2. Sentiment Analisis<br>
-   Melakukan sentimen analisis menggunakan model yang sudah di train sebelumnya. Anda dapat
-   melakukan running pada `main.py` dengan menambahkan beberapa argumen seperti:
-
-   - `n` : Banyaknya data yang akan dicrawl
-   - `-e` : Export data menjadi file `csv` [OPTIONAL]
-
-   Contoh :
-
-   | OS      | Command                                                   |
-   | ------- | --------------------------------------------------------- |
-   | Linux   | `python main.py -n 1000` atau `python main.py -n 1000 -e` |
-   | windows | `py main.py -n 1000` atau `py main.py -n 1000 -e`         |
 
 ## Web Application
 
 Anda dapat mencoba model yang sudah dilatih dari penelitian ini secara langsung di
 [Sentiment Detector](https://hyuto.github.io/showcase/sa-corona)
 
-## Magic `config.json`
+## Setup
 
-Kustomisasi dapat dilakukan dengan mengedit `config.json`
-
-1. `"TWITTER-API"` : Bagian wajib yang harus diisi dengan key yang telah anda dapatkan dari pihak
-   tweeter.
-2. `"VECTORIZER"` : Bagian yang mencangkup `path` atau letak file pickle vectorizer yang telah
-   dilakukan _fitting_ untuk diload.
-3. `"MODEL"` : Bagian yang mencangkup `path` atau letak file pickle model yang telah dilatih untuk
-   diload. **Note** : Terdapat beberapa model yang telah dilatih di dalam folder `model`
-4. `"SEARCH-PLAN"` : Bagian yang mengatur pencarian/crawling tweet.
-   - `"query"` : Query pencarian tweet. Tweet yang dicari akan mengandung kata - kata yang terdapat
-     dalam `query`
-   - `"geocode"` : Geocode/letak tweet yang akan dicari dalam format `"longitude,latitude,jari-jari"`
-
-## Convert model to `onnx`
-
-Convert trained model using `skl2onnx` and run model anda dimana saja. Ubah _path_ pada
-`"VECTORIZER"` dan `"MODEL"` dalam `config.json` ke custom model yang sudah dilatih.
-
-```json
-...
-"VECTORIZER": {
-   "path": "path/to/custom-tfidf.pickle"
-},
-
-"MODEL": {
-   "path": "path/to/custom-model.pickle"
-},
-...
-```
-
-Selanjutnya jalankan `onnx-converter.py`.
+Setup local environment. Pertama clone/download repo ini. Selanjutnya, buat _virtual environments_ dan aktifkan. Kemudian install dependencies pada `requirements.txt`.
 
 ```bash
-python onnx-converter.py
+$ pip install -r requirements.txt
 ```
 
-Anda dapat menambahkan argumen `--split` untuk memisahkan _tf-idf_ dengan _main-model_ agar masing -
-masing menjadi file _onnx_ yang independen.
+## CLI
 
-## Note
+Mengakses setiap feature yang ada lewat CLI.
 
-Jika terdapat error pada pengimportan library `nltk` run script `nltk-handler.py`
+```bash
+python -m src --help
+```
 
-| OS      | Command                  |
-| ------- | ------------------------ |
-| Linux   | `python nltk-handler.py` |
-| windows | `py nltk-handler.py`     |
+1. Scraping twitter menggunakan `snscrape`
+
+   Melakukan scraping data twitter terkait topik apapun dengan menggunakan library `snscrape`.
+
+   ```bash
+   python -m src scrape --help
+   ```
+
+   **Contoh**
+
+   Scraping data twitter terkait minyak di DKI Jakarta.
+
+   ```
+   query="minyak"
+   geocode="-6.213621,106.832673,20km" # geocode-Jakarta
+   max-results=5000 # maksimal-tweet
+   export="minyak" # export-scraping
+   ```
+
+   ```bash
+   python -m src scrape "minyak" \
+      --geocode "-6.213621,106.832673,20km" \
+      --max-results 5000 \
+      --export "minyak"
+   ```
+
+2. Model Testing
+
+   Testing model yang sudah dilatih sebelumnya sembari melakukan scraping data twitter
+   terkait topik corona dengan menggunakan library `snscrape`.
+
+   ```bash
+   python -m src model-test --help
+   ```
+
+   **Contoh**
+
+   Mendetect tweet tentang covid di kota Malang
+
+   ```
+   query="#corona OR covid OR Covid19 OR #DiRumahAja OR #quarantine OR Corona OR DiRumahAja OR wabah OR pandemi OR quarantine"
+   geocode="-7.97712,112.63403,20km" # geocode-Malang
+   max-results=5000 # maksimal-tweet
+   export="covid" # export-scraping
+   ```
+
+   ```bash
+   python -m src model-test \
+      --geocode "-7.97712,112.63403,20km" \
+      --max-results 5000 \
+      --export "covid"
+   ```
+
+3. ONNX Model Converter
+
+   Convert model yang sudah terlatih dalam bentuk pickle ke `onnx`.
+
+   ```bash
+   python -m src convert-onnx --help
+   ```
+
+© 2020 Wahyu Setianto

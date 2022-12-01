@@ -15,7 +15,7 @@ logging.basicConfig(format="[ %(levelname)s ] %(message)s", level=logging.INFO)
 
 def onnx_model_converter(
     model_path: str, output_dir: str, zipmap: bool = False, ort: bool = False
-) -> None:
+) -> str:
     model = pickle.load(open(model_path, "rb"))
 
     logging.info(f"Converting model : {model_path}")
@@ -41,8 +41,8 @@ def onnx_model_converter(
     if ort:
         logging.info("Optimizing onnx model to ort...")
         subprocess.run(
-            f'{sys.executable} -m onnxruntime.tools.convert_onnx_models_to_ort "{os.path.abspath(filename)}"',
+            f'{sys.executable} -m onnxruntime.tools.convert_onnx_models_to_ort "{os.path.abspath(filename)}" --output_dir "{os.path.splitext(filename)[0]}-ort"',
             shell=True,
         )
 
-    logging.info("Done!")
+    return filename

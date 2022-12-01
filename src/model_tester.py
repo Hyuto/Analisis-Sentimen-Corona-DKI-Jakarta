@@ -73,7 +73,7 @@ class ModelScraper(TwitterScraper):
             "url": "url",
             **add_features,
         }
-        if denied_users is not None:
+        if denied_users is not None:  # pragma: no cover
             denied_users = self._denied_users_handler(denied_users)  # type: ignore
 
         if export is not None:
@@ -120,7 +120,7 @@ class ModelScraper(TwitterScraper):
                         kill_proc_tree(snscrape.pid)
                         break
                 index += 1
-        except KeyError as e:
+        except KeyError as e:  # pragma: no cover
             kill_proc_tree(snscrape.pid)
             raise e
         except KeyboardInterrupt:  # pragma: no cover

@@ -144,6 +144,8 @@ def convert_onnx(
         ort=ort,
     )
 
+    logging.info("Done!")
+
 
 @main.command("clean", help="Membersihkan project main directory")
 def clean_up(

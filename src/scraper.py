@@ -183,7 +183,7 @@ class TwitterScraper:
                         kill_proc_tree(snscrape.pid)
                         break
                 index += 1
-        except KeyError as e:
+        except KeyError as e:  # pragma: no cover
             kill_proc_tree(snscrape.pid)
             raise e
         except KeyboardInterrupt:  # pragma: no cover

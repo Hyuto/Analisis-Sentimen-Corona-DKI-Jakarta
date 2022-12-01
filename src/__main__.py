@@ -22,9 +22,7 @@ def scrape(
     query: str = typer.Argument(..., help="Query pencarian tweet"),
     lang: str = typer.Option("id", help="Bahasa"),
     max_results: Optional[int] = typer.Option(None, help="Banyak tweet maksimal yang discrape"),
-    geocode: Optional[str] = typer.Option(
-        "-6.213621,106.832673,20km", help="Geocode daerah yang akan di scrape."
-    ),
+    geocode: Optional[str] = typer.Option(None, help="Geocode daerah yang akan di scrape."),
     since: Optional[str] = typer.Option(
         None, help="Since (batasan awal tanggal tweet) [isoformated date string]"
     ),
@@ -43,7 +41,7 @@ def scrape(
     ),
     verbose: bool = typer.Option(True, help="Logging setiap tweet yang discrape"),
 ) -> None:
-    add_features = ast.literal_eval(add_features) if add_features else {}
+    add_features = ast.literal_eval(add_features) if add_features else {}  # type: ignore
     if denied_users:
         if not Path(denied_users).exists():
             raise FileNotFoundError("Denied users file is not found!")
@@ -67,13 +65,21 @@ def scrape(
 
 @main.command("model-test", help="Testing model dengan tweet baru")
 def model_test(
-    query: str = typer.Argument("vaksin (corona OR covid)", help="Query pencarian tweet"),
+    query: str = typer.Argument(
+        "#corona OR covid OR Covid19 OR #DiRumahAja OR #quarantine OR Corona OR DiRumahAja OR wabah OR pandemi OR quarantine",
+        help="Query pencarian tweet",
+    ),
     model: str = typer.Argument(
-        (main_dir / "models" / "model.onnx").relative_to(main_dir).as_posix(),
+        (main_dir / "models" / "[TRAINED] Pipelined TF-IDF - SVM.onnx")
+        .relative_to(main_dir)
+        .as_posix(),
         help="Path model yang digunakan",
     ),
     lang: str = typer.Option("id", help="Bahasa"),
     max_results: Optional[int] = typer.Option(None, help="Banyak tweet maksimal yang discrape"),
+    geocode: Optional[str] = typer.Option(
+        "-6.213621,106.832673,20km", help="Geocode daerah yang akan di scrape."
+    ),
     since: Optional[str] = typer.Option(
         None, help="Since (batasan awal tanggal tweet) [isoformated date string]"
     ),
@@ -82,17 +88,17 @@ def model_test(
     ),
     export: Optional[str] = typer.Option(None, help="Nama file untuk export tweet hasil scrape"),
     add_features: Optional[str] = typer.Option(
-        None, help='Menambahkan feature yang akan diexport dalam file csv [string separated by ","]'
+        None, help="Menambahkan feature yang akan diexport dalam file csv [json formated string]"
     ),
     denied_users: Optional[str] = typer.Option(
-        (main_dir / "data" / "denied-users.json").relative_to(main_dir).as_posix(),
+        None,
         help=(
             "List user yang tweetnya diabaikan [pathlike string ke file list user (json formated)]"
         ),
     ),
     verbose: bool = typer.Option(True, help="Logging setiap tweet yang discrape"),
 ) -> None:
-    add_features = add_features.split(",") if add_features else []  # type: ignore
+    add_features = ast.literal_eval(add_features) if add_features else {}  # type: ignore
     if denied_users:
         if not Path(denied_users).exists():
             raise FileNotFoundError("Denied users file is not found!")
@@ -104,7 +110,7 @@ def model_test(
 
     from src.model_tester import ModelScraper
 
-    scraper = ModelScraper(model, query, lang, since, until)
+    scraper = ModelScraper(model, query, lang, geocode, since, until)
     scraper.scrape(
         export=export,
         add_features=add_features,  # type: ignore
@@ -119,6 +125,7 @@ def model_test(
 )
 def convert_onnx(
     path: str = typer.Argument(..., help="Path ke model yang akan di convert (pickle formated)"),
+    zipmap: bool = typer.Option(False, help="Menggunakan zipmap pada final estimator dalam model"),
     ort: bool = typer.Option(False, help="Convert ke tipe ort"),
 ) -> None:
     model_path = Path(path)
@@ -128,39 +135,14 @@ def convert_onnx(
     output_dir = main_dir / "output"
     output_dir.mkdir(exist_ok=True)
 
-    import pickle
-    import subprocess
-    import sys
+    from src.onnx_converter import onnx_model_converter
 
-    from onnx.checker import check_model
-    from skl2onnx import convert_sklearn
-    from skl2onnx.common.data_types import StringTensorType
-    from src.utils import get_name
-
-    model = pickle.load(open(model_path, "rb"))
-
-    logging.info(f"Converting model : {model_path.as_posix()}")
-    onnx_model = convert_sklearn(
-        model,
-        initial_types=[("words", StringTensorType([None, 1]))],
-        options={"svm": {"zipmap": False}},
+    onnx_model_converter(
+        model_path=model_path.as_posix(),
+        output_dir=output_dir.relative_to(main_dir).as_posix(),
+        zipmap=zipmap,
+        ort=ort,
     )
-    logging.info(f"Checking onnx model...")
-    check_model(onnx_model)
-
-    filename = get_name((output_dir / "Exported model.onnx").relative_to(main_dir).as_posix())
-    logging.info(f"Exporting onnx model to : {filename}")
-    with open(filename, "wb") as writer:
-        writer.write(onnx_model.SerializeToString())
-
-    if ort:
-        logging.info("Optimizing onnx model to ort...")
-        subprocess.run(
-            f'{sys.executable} -m onnxruntime.tools.convert_onnx_models_to_ort "{(main_dir / filename).absolute()}"',
-            shell=True,
-        )
-
-    logging.info("Done!")
 
 
 @main.command("clean", help="Membersihkan project main directory")

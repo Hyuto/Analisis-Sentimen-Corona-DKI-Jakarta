@@ -19,11 +19,14 @@ main_dir = Path(__file__).parents[1]
 
 class TwitterScraper:
     """Scrapping twitter berdasarkan query yang diberikan.
+
     Args:
         query (str): Search query.
         lang (str): Language. Defaults to "id".
+        geocode (Optional[str]): Geocode [lat,long,r]. Defaults to None.
         since (Optional[str]): Since [string isoformated datetime]. Defaults to None.
         until (Optional[str]): Until [string isoformated datetime]. Defaults to None.
+
     Examples:
         Scraping spesifik topik
         >>> scraper = TwitterScraper(query="minyak")
@@ -58,6 +61,7 @@ class TwitterScraper:
 
     def _get_command(self) -> str:
         """Mengenerate command yang akan diberikan pada `snscrape`
+
         Returns:
             str: command
         """
@@ -122,9 +126,8 @@ class TwitterScraper:
         Args:
             add_features (Dict[str, str]): Menambahkan filter kolom yang akan diexport.
                 Defaults to {}.
-            denied_users (Optional[str]): List user yang tweetnya dapat
-                dihiraukan. Dapat berupa pathlike string ke file tempat list user disimpan
-                (json format) atau berupa sequence. Defaults to None.
+            denied_users (Optional[str]): List user yang tweetnya dapat dihiraukan, berupa
+                pathlike string ke file tempat list user disimpan (json format). Defaults to None.
             max_result (Optional[int]): Jumlah maksimal tweet yang di scrape. Defaults to None.
             export (Optional[str]): Nama file tempat table diexport pada direktori `output`.
                 Jika `None` maka table hasil scraping tidak akan diexport. Defaults to None.

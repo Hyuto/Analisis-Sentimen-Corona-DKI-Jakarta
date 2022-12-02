@@ -16,6 +16,17 @@ logging.basicConfig(format="[ %(levelname)s ] %(message)s", level=logging.INFO)
 def onnx_model_converter(
     model_path: str, output_dir: str, zipmap: bool = False, ort: bool = False
 ) -> str:
+    """Convert sklearn saved model (pickle) to onnx.
+
+    Args:
+        model_path (str): Model path.
+        output_dir (str): Exported onnx model directory.
+        zipmap (bool, optional): Use zipmap on final estimator. Defaults to False.
+        ort (bool, optional): Convert to optimized model (.ort). Defaults to False.
+
+    Returns:
+        str: _description_
+    """
     model = pickle.load(open(model_path, "rb"))
 
     logging.info(f"Converting model : {model_path}")

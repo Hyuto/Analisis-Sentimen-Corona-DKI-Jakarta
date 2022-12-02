@@ -22,8 +22,9 @@ class ModelScraper(TwitterScraper):
 
     Args:
         model (str): Model path.
-        query (str): Search query. Defaults to "vaksin (corona OR covid)".
+        query (str): Search query. Defaults to "#corona OR covid OR Covid19 OR #DiRumahAja OR #quarantine OR Corona OR DiRumahAja OR wabah OR pandemi OR quarantine".
         lang (str): Language. Defaults to "id".
+        geocode (Optional[str]): Geocode [lat,long,r]. Defaults to "-6.213621,106.832673,20km" which is Jakarta geocode.
         since (Optional[str]): Since [string isoformated datetime]. Defaults to None.
         until (Optional[str]): Until [string isoformated datetime]. Defaults to None.
     """
@@ -33,7 +34,7 @@ class ModelScraper(TwitterScraper):
         model: str,
         query: str = "#corona OR covid OR Covid19 OR #DiRumahAja OR #quarantine OR Corona OR DiRumahAja OR wabah OR pandemi OR quarantine",
         lang: str = "id",
-        geocode: Optional[str] = "-6.213621,106.832673,20km",  # jaarta geocode
+        geocode: Optional[str] = "-6.213621,106.832673,20km",  # jakarta geocode
         since: Optional[str] = None,
         until: Optional[str] = None,
     ) -> None:
@@ -54,9 +55,8 @@ class ModelScraper(TwitterScraper):
         Args:
             add_features (Dict[str, str]): Menambahkan filter kolom yang akan diexport.
                 Defaults to {}.
-            denied_users (Optional[str]): List user yang tweetnya dapat
-                dihiraukan. Dapat berupa pathlike string ke file tempat list user disimpan
-                (json format) atau berupa sequence. Defaults to None.
+            denied_users (Optional[str]): List user yang tweetnya dapat dihiraukan, berupa
+                pathlike string ke file tempat list user disimpan (json format). Defaults to None.
             max_result (Optional[int]): Jumlah maksimal tweet yang di scrape. Defaults to None.
             export (Optional[str]): Nama file tempat table diexport pada direktori `output`.
                 Jika `None` maka table hasil scraping tidak akan diexport. Defaults to None.

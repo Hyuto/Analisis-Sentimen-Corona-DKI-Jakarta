@@ -1,0 +1,46 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/**'
+      - 'tests/**'
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'tests/**'
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ["3.8", "3.9"]
+    env:
+      PYTHON: ${{ matrix.python-version }}
+      OS: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install poetry
+        run: pipx install poetry
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'poetry'
+      - name: Install dependencies
+        run: poetry install
+      - name: Test with pytest
+        run: poetry run pytest --cov=src/ -v --cov-report=xml:./coverage.xml
+      - name: Upload code coverage
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+          name: Analisis-Sentimen-Corona-DKI-Jakarta
+          flags: unittests
+          env_vars: OS,PYTHON

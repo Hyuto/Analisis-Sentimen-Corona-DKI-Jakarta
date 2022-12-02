@@ -7,12 +7,19 @@ import onnxruntime as ort
 
 
 class Model:
+    """ONNX Model handler
+
+    Args:
+        model_path (str): onnx model path
+    """
+
     def __init__(self, model_path: str) -> None:
         self._path = model_path
         self.onnx_model = onnx.load_model(model_path)
         self.session = ort.InferenceSession(model_path)
 
     def summary(self) -> None:  # pragma: no cover
+        """Print model summary"""
         print(f"Model : {self._path}\n")
         print("Input :")
         for x in self.session.get_inputs():
@@ -27,6 +34,15 @@ class Model:
     def predict(
         self, texts: Union[str, List[str], npt.NDArray[np.string_]]
     ) -> Tuple[npt.NDArray[np.int64], npt.NDArray[np.float64]]:
+        """Predict using model.
+
+        Args:
+            texts (Union[str, List[str], npt.NDArray[np.string_]]): Teks input yang akan di deteksi
+            oleh model. Dapat berupa string tunggal atau sequence berupa list ataupun numpy array.
+
+        Returns:
+            Hasil deteksi berupa tupple dengan format (label, probabilities).
+        """
         if type(texts) == str:
             X = np.asarray([[texts]])
         elif type(texts) == list:

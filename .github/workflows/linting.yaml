@@ -1,0 +1,32 @@
+name: Lint
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '**.py'
+  pull_request:
+    paths:
+      - '**.py'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install poetry
+        run: pipx install poetry
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+          cache: 'poetry'
+      - name: Install dependencies
+        run: poetry install
+      - name: Format check with black
+        run: poetry run black --check .
+      - name: Format imports with isort
+        run: poetry run isort --check-only .
+      - name: Typecheck with mypy
+        run: poetry run mypy src/ --no-incremental --ignore-missing-imports

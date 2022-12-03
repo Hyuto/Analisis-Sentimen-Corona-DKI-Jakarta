@@ -8,10 +8,14 @@ from pathlib import Path
 from subprocess import PIPE, Popen
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
+from rich.live import Live
+from rich.logging import RichHandler
+from rich.table import Table
 from src.utils import datetime_validator, get_name, kill_proc_tree
 
 # Setup logging
-logging.basicConfig(format="[ %(levelname)s ] %(message)s", level=logging.INFO)
+logging.basicConfig(format="%(message)s", level=logging.INFO, handlers=[RichHandler()])
+log = logging.getLogger("rich")
 
 # main directory
 main_dir = Path(__file__).parents[1]
@@ -148,7 +152,7 @@ class TwitterScraper:
             denied_users = self._denied_users_handler(denied_users)  # type: ignore
 
         if export is not None:
-            logging.info(f"Exporting to 'output' directory")
+            log.info(f"Exporting to 'output' directory")
             path = main_dir / "output"
             path.mkdir(exist_ok=True)
             filename = get_name((path / f"scrape-{export}.csv").as_posix())
@@ -156,45 +160,50 @@ class TwitterScraper:
             writer = csv.writer(f)
             writer.writerow(list(filters.keys()))
 
-        logging.info("Scraping...")
+        log.info("Scraping...")
         snscrape = Popen(command, stdout=PIPE, stderr=PIPE, shell=True)
         assert snscrape.stdout is not None, "None stdout"
 
         try:
-            index = 1
-            for out in snscrape.stdout:
-                temp = self._flatten(json.loads(out))
+            table = Table()
+            table.add_column("No")
+            table.add_column("Date")
+            table.add_column("Username")
+            table.add_column("Content")
 
-                if denied_users is not None:  # filter username
-                    if temp["user.username"] in denied_users:  # pragma: no cover
-                        continue
+            with Live(None, refresh_per_second=1, vertical_overflow="visible") as live:
+                index = 1
+                for out in snscrape.stdout:
+                    temp = self._flatten(json.loads(out))
 
-                if verbose:  # logging output
-                    content = repr(
-                        f"{temp['content'][:67]}..."
-                        if len(temp["content"]) > 70
-                        else temp["content"]
-                    )
-                    print(f"{index} - {temp['date']} - {temp['user.username']} - {content}")
+                    if denied_users is not None:  # filter username
+                        if temp["user.username"] in denied_users:  # pragma: no cover
+                            continue
 
-                if export:  # write row
-                    row = [temp[x] for x in filters.values()]
-                    writer.writerow(row)
+                    if verbose:  # logging output
+                        table.add_row(
+                            f"{index}", temp["date"], temp["user.username"], temp["content"]
+                        )
+                        live.update(table)
 
-                if max_result:  # brake and kill subprocess
-                    if index >= max_result:
-                        kill_proc_tree(snscrape.pid)
-                        break
-                index += 1
+                    if export:  # write row
+                        row = [temp[x] for x in filters.values()]
+                        writer.writerow(row)
+
+                    if max_result:  # brake and kill subprocess
+                        if index >= max_result:
+                            kill_proc_tree(snscrape.pid)
+                            break
+                    index += 1
         except KeyError as e:  # pragma: no cover
             kill_proc_tree(snscrape.pid)
             raise e
         except KeyboardInterrupt:  # pragma: no cover
-            logging.info("Received exit from user, exiting...")
+            log.info("Received exit from user, exiting...")
             kill_proc_tree(snscrape.pid)
 
         if export:
-            logging.info(f"Successfully Exported to {filename}")
+            log.info(f"Successfully Exported to {filename}")
             f.close()
 
-        logging.info("Done!")
+        log.info("Done!")

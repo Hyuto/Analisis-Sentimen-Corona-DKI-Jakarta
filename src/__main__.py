@@ -6,9 +6,11 @@ from pathlib import Path
 from typing import List, Optional
 
 import typer
+from rich.logging import RichHandler
 
 # Setup logging
-logging.basicConfig(format="[ %(levelname)s ] %(message)s", level=logging.INFO)
+logging.basicConfig(format="%(message)s", level=logging.INFO, handlers=[RichHandler()])
+log = logging.getLogger("rich")
 
 # Setup typer
 main = typer.Typer(add_completion=False)
@@ -46,7 +48,7 @@ def scrape(
         if not Path(denied_users).exists():
             raise FileNotFoundError("Denied users file is not found!")
 
-    logging.info("Starting scrape commands with args:")
+    log.info("Starting scrape commands with args:")
     args = locals()
     for k, v in args.items():
         print(f"  * {k} : {v}")
@@ -103,7 +105,7 @@ def model_test(
         if not Path(denied_users).exists():
             raise FileNotFoundError("Denied users file is not found!")
 
-    logging.info("Starting scrape commands with args:")
+    log.info("Starting scrape commands with args:")
     args = locals()
     for k, v in args.items():
         print(f"  * {k} : {v}")
@@ -144,7 +146,7 @@ def convert_onnx(
         ort=ort,
     )
 
-    logging.info("Done!")
+    log.info("Done!")
 
 
 @main.command("clean", help="Membersihkan project main directory")
@@ -167,20 +169,20 @@ def clean_up(
                     continue
                 try:
                     if verbose:
-                        logging.info(f"Deleting : {to_delete}")
+                        log.info(f"Deleting : {to_delete}")
                     if path.is_dir():
                         shutil.rmtree(path)
                     else:
                         path.unlink()
                 except:
-                    logging.error(f"Error on deleting : {path}")
+                    log.error(f"Error on deleting : {path}")
 
     directory = cache_dir + additional_dir if clear else cache_dir
     delete(iterator=directory)
     files = cache_file + additional_file if clear else cache_file
     delete(iterator=files)
 
-    logging.info("Done!")
+    log.info("Done!")
 
 
 main()

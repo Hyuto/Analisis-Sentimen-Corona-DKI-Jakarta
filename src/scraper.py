@@ -140,7 +140,7 @@ class TwitterScraper:
         command = self._get_command()
         filters = {
             "tanggal": "date",
-            "tweets": "content",
+            "tweets": "rawContent",
             "username": "user.username",
             "retweet": "retweetCount",
             "source": "sourceLabel",
@@ -182,7 +182,7 @@ class TwitterScraper:
 
                     if verbose:  # logging output
                         table.add_row(
-                            f"{index}", temp["date"], temp["user.username"], temp["content"]
+                            f"{index}", temp["date"], temp["user.username"], temp["rawContent"]
                         )
                         live.update(table)
 

@@ -107,7 +107,7 @@ lxml = ["lxml"]
 
 [[package]]
 name = "black"
-version = "22.10.0"
+version = "22.12.0"
 description = "The uncompromising code formatter."
 category = "dev"
 optional = false
@@ -147,7 +147,7 @@ dev = ["build (==0.8.0)", "flake8 (==4.0.1)", "hashin (==0.17.0)", "pip-tools (=
 
 [[package]]
 name = "certifi"
-version = "2022.9.24"
+version = "2022.12.7"
 description = "Python package for providing Mozilla's CA Bundle."
 category = "main"
 optional = false
@@ -174,14 +174,11 @@ python-versions = ">=3.6.1"
 
 [[package]]
 name = "charset-normalizer"
-version = "2.1.1"
+version = "3.0.1"
 description = "The Real First Universal Charset Detector. Open, modern and actively maintained alternative to Chardet."
 category = "main"
 optional = false
-python-versions = ">=3.6.0"
-
-[package.extras]
-unicode_backport = ["unicodedata2"]
+python-versions = "*"
 
 [[package]]
 name = "click"
@@ -758,7 +755,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "lxml"
-version = "4.9.1"
+version = "4.9.2"
 description = "Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API."
 category = "main"
 optional = false
@@ -1469,7 +1466,7 @@ test = ["pytest (>=6,!=7.0.0,!=7.0.1)", "pytest-cov (>=3.0.0)", "pytest-qt"]
 
 [[package]]
 name = "requests"
-version = "2.28.1"
+version = "2.28.2"
 description = "Python HTTP for Humans."
 category = "main"
 optional = false
@@ -1477,7 +1474,7 @@ python-versions = ">=3.7, <4"
 
 [package.dependencies]
 certifi = ">=2017.4.17"
-charset-normalizer = ">=2,<3"
+charset-normalizer = ">=2,<4"
 idna = ">=2.5,<4"
 PySocks = {version = ">=1.5.6,<1.5.7 || >1.5.7", optional = true, markers = "extra == \"socks\""}
 urllib3 = ">=1.21.1,<1.27"
@@ -1627,7 +1624,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "snscrape"
-version = "0.4.3.20220106"
+version = "0.5.0.20230113"
 description = "A social networking service scraper"
 category = "main"
 optional = false
@@ -1639,9 +1636,6 @@ filelock = "*"
 lxml = "*"
 pytz = {version = "*", markers = "python_version < \"3.9.0\""}
 requests = {version = "*", extras = ["socks"]}
-
-[package.extras]
-test = ["coverage"]
 
 [[package]]
 name = "soupsieve"
@@ -1809,7 +1803,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "urllib3"
-version = "1.26.13"
+version = "1.26.14"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 category = "main"
 optional = false
@@ -1905,7 +1899,7 @@ jupyter = ["jupyter"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "cf278ed6db5c6c7559e88d76ef37b279bc6c8b149deabefad3315a5b4070b3e0"
+content-hash = "c763e7e26abbaffcaf8a8d1e5364713172cfb6e199411ac6d1577d5c2d0d606f"
 
 [metadata.files]
 anyio = []

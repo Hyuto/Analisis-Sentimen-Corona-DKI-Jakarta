@@ -69,7 +69,7 @@ class ModelScraper(TwitterScraper):
         command = self._get_command()
         filters = {
             "tanggal": "date",
-            "tweets": "content",
+            "tweets": "rawContent",
             "username": "user.username",
             "retweet": "retweetCount",
             "source": "sourceLabel",
@@ -110,21 +110,21 @@ class ModelScraper(TwitterScraper):
                         if temp["user.username"] in denied_users:  # pragma: no cover
                             continue
 
-                    class_pred, _ = self.model.predict(preprocessing(temp["content"]))
+                    class_pred, _ = self.model.predict(preprocessing(temp["rawContent"]))
 
                     if verbose:  # logging output
                         sentiment = self.labels[class_pred[0]]
                         color = ""
-                        if sentiment == "positive":
+                        if sentiment == "positive":  # pragma: no cover
                             color = "[green]"
-                        elif sentiment == "negative":
+                        elif sentiment == "negative":  # pragma: no cover
                             color = "[red]"
 
                         table.add_row(
                             f"{index}",
                             temp["date"],
                             temp["user.username"],
-                            temp["content"],
+                            temp["rawContent"],
                             f"{color}{sentiment}",
                         )
                         live.update(table)
